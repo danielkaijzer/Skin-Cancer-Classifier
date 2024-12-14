@@ -2,8 +2,6 @@
 
 ## Author
 Daniel Kaijzer
-Email: daniel.kaijzer72@myhunter.cuny.edu
-GitHub: https://github.com/danielkaijzer
 
 ## Project Overview
 This project is a web application that allows users to upload an image of a skin lesion and receive a prediction of the probability of the lesion being malignant. The application uses a machine learning model that was trained on a dataset of skin lesion images and associated metadata to make the predictions.
