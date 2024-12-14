@@ -1,3 +1,10 @@
+"""
+
+Skin Lesion Malignancy Probability Web App
+Author: Daniel Kaijzer
+
+"""
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -15,7 +22,8 @@ import lightgbm as lgb
 st.set_page_config(page_title="Skin Lesion Analysis", layout="wide")
 
 # Debug mode checkbox
-debug_mode = st.sidebar.checkbox("Debug Mode", value=True)
+# debug_mode = st.sidebar.checkbox("Debug Mode", value=False)
+debug_mode = False
 
 # Load model
 model = joblib.load('model.pkl')
@@ -26,7 +34,7 @@ with open('feature_columns.json', 'r') as f:
 
 # These are the original categorical columns for input to encoder
 input_cat_cols = ['sex', 'anatom_site_general', 'tbp_lv_location', 'tbp_lv_location_simple']
-# These are the one-hot encoded column names from the json
+# These are the one-hot encoded column names from the jsonco
 output_cat_cols = cols_info['cat_cols']
 new_feature_cols = cols_info['new_feature_cols']
 
@@ -100,7 +108,7 @@ with col2:
         image_path = Path('Sample_Images') / f"{selected_image_id}.jpg"
         if image_path.exists():
             img = Image.open(image_path)
-            st.image(img, caption=f"Image: {selected_image_id}", use_column_width=True)
+            st.image(img, caption=f"Image: {selected_image_id}", use_container_width=True)
         else:
             st.warning("Image file not found in Sample_Images folder")
             
@@ -145,7 +153,7 @@ with col2:
                     # Extract features in exact order
                     X_point = data_point[new_feature_cols]
 
-                    X_point.to_csv('X_point_streamlit.csv')
+                    # X_point.to_csv('Test_Prediction_Metadata.csv')
 
                     # Before prediction
                     st.write("Data point columns:", data_point.columns.tolist())
@@ -176,10 +184,10 @@ with col2:
                                       unsafe_allow_html=True)
                     
                     # Debug information
-                    if st.checkbox("Show Debug Information"):
-                        st.write("Input Features:", df)
-                        st.write("Raw Metadata:", sample_metadata)
-                        st.write("Feature Columns Used:", new_feature_cols)
+                    # if st.checkbox("Show Debug Information"):
+                    #     st.write("Input Features:", df)
+                    #     st.write("Raw Metadata:", sample_metadata)
+                    #     st.write("Feature Columns Used:", new_feature_cols)
                         
             except Exception as e:
                 st.error(f"Error during analysis: {str(e)}")
@@ -187,14 +195,14 @@ with col2:
     else:
     # Image upload
         st.write("Upload Lesion Image")
-        uploaded_file = st.file_uploader("Image must be 127x127 pixels (JPG/PNG)", type=["jpg","jpeg","png"])
+        uploaded_file = st.file_uploader("Image must be under 2000 pixels in width or height (JPG/PNG)", type=["jpg","jpeg","png"])
         
         if uploaded_file is not None:
             # Display uploaded image
             image_data = uploaded_file.read()
             img = Image.open(io.BytesIO(image_data)).convert("RGB")
             img_array = np.array(img)
-            st.image(img_array, caption="Uploaded Image", use_column_width=True)
+            st.image(img_array, caption="Uploaded Image", use_container_width=True)
             
             # Validate image size
             height, width = img_array.shape[:2]
@@ -202,7 +210,7 @@ with col2:
             #     st.error("⚠️ Image must be square (same width and height)")
             if height > 2000 or width > 2000:  
                 st.error("⚠️ Image is too large. Please use an image 2000x2000 pixels or smaller")
-            elif height < 100 or width < 100:  
+            elif height < 90 or width < 90:  
                 st.error("⚠️ Image is too small. Please use an image at least 127x127 pixels")
             elif age_approx <= 0:
                 st.warning("⚠️ Please enter a valid age")
@@ -216,14 +224,23 @@ with col2:
                             # Derive simple location
                             tbp_lv_location_simple = simplify_location(tbp_lv_location)
                             
-                            # Process image
-                            lab_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2LAB)
-                            contour, mask_bool, outside_mask = create_masks(img_array)
-                            
-                            # Show contour
-                            display_img = img_array.copy()
+                            # Convert RGB to BGR for OpenCV processing
+                            bgr_img = cv2.cvtColor(img_array, cv2.COLOR_RGB2BGR)
+
+                            # Process image - use BGR image for both operations
+                            lab_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2LAB)
+                            contour, mask_bool, outside_mask = create_masks(bgr_img)
+
+                            # Show contour (on RGB image)
+                            display_img = img_array.copy()  # Use RGB for display
                             cv2.drawContours(display_img, [contour], -1, (0, 255, 0), 2)
-                            st.image(display_img, caption="Detected Lesion Boundary", use_column_width=True)
+                            st.image(display_img, caption="Detected Lesion Boundary", use_container_width=True)
+
+                            # # segmentation mask
+                            # mask_viz = np.zeros_like(img_array)
+                            # mask_viz[mask_bool] = [0, 255, 0]  # Green for lesion
+                            # mask_viz[outside_mask] = [255, 0, 0]  # Red for outside
+                            # st.image(mask_viz, caption="Segmentation Mask (Green=Lesion, Red=Outside)", use_container_width=True)
                             
                             # Calculate features
                             _, _, w, h = cv2.boundingRect(contour)
@@ -280,7 +297,7 @@ with col2:
                             # Extract features in exact order
                             X_point = data_point[new_feature_cols]
 
-                            X_point.to_csv('X_point_streamlit_nondebug.csv')
+                            # X_point.to_csv('X_point_streamlit_nondebug.csv')
 
                             # Make prediction
                             prediction = model.predict_proba(X_point)[0][1]

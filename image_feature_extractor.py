@@ -17,8 +17,22 @@ from skimage.segmentation import active_contour
 
 def create_masks(img):
     """Create lesion and surrounding area masks."""
+
+    # Double check BGR conversion (for web app to work properly)
+    # check if image is BGR or RGB and convert to BGR if needed
+    if len(img.shape) == 3 and img.shape[2] == 3:
+        # Check if image is already BGR
+        if isinstance(img, np.ndarray) and img.dtype == np.uint8:
+            bgr_img = img
+        else:
+            # Convert RGB to BGR
+            bgr_img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    else:
+        raise ValueError("Image must be a 3-channel color image")
+
+
     # Convert to LAB
-    lab_img = cv2.cvtColor(img, cv2.COLOR_BGR2LAB)
+    lab_img = cv2.cvtColor(bgr_img, cv2.COLOR_BGR2LAB)
     L = lab_img[:,:,0]
     A = lab_img[:,:,1]
     B = lab_img[:,:,2]  # Add B channel
@@ -327,16 +341,35 @@ def analyze_lesion(image_path, diameter_mm):
 
 
 def main():
-    """Main execution function."""
+    """Main execution function with user input for image selection."""
     # Setup paths
     train_path = Path('train-metadata.csv')
-    image_folder = Path('Sample_Images')
-    image_filename = "ISIC_0082829.jpg"
-    image_path = image_folder / image_filename
+    image_folder = Path('Test_Images')
 
-    # Check if the image file exists
-    if not image_path.exists():
-        raise FileNotFoundError(f"Image {image_filename} not found in the specified folder.")
+    # Get user input for image file
+    print("\nAvailable images in Sample_Images folder:")
+    try:
+        image_files = list(image_folder.glob('*.jpg')) 
+        for idx, file in enumerate(image_files, 1):
+            print(f"{idx}. {file.name}")
+        
+        # Get user selection
+        while True:
+            try:
+                selection = input("\nEnter the number of the image you want to analyze (or 'q' to quit): ")
+                if selection.lower() == 'q':
+                    return
+                
+                idx = int(selection) - 1
+                if 0 <= idx < len(image_files):
+                    image_path = image_files[idx]
+                    break
+                else:
+                    print("Invalid selection. Please try again.")
+            except ValueError:
+                print("Please enter a valid number or 'q' to quit.")
+    except Exception as e:
+        raise Exception(f"Error accessing image folder: {e}")
 
     # Extract image ID from filename
     image_id = image_path.stem
@@ -355,34 +388,23 @@ def main():
 
     # Get diameter
     diameter_mm = sample_metadata['clin_size_long_diam_mm']
-    print(diameter_mm)
+    print(f"\nAnalyzing image: {image_path.name}")
+    print(f"Lesion diameter: {diameter_mm}mm")
 
     # Calculate features
     features = analyze_lesion(image_path, diameter_mm)
 
-    # Compare with original values
-    calculated_df = pd.DataFrame([features])
-    calculated_df.index = [image_id]
-
     # Print comparison
+    print("\nFeature Comparison:")
+    print("-" * 50)
     for col in features.keys():
         if col in sample_metadata:
             calc_val = features[col]
             orig_val = sample_metadata[col]
             print(f"\n{col}:")
-            print(f"  Calculated: {calc_val}")
-            print(f"  Original:   {orig_val}")
-            print(f"  Difference: {abs(calc_val - orig_val)}")
-
-    # Specify the exact image file name
-    image_filename = "ISIC_0082829.jpg"
-    image_path = image_folder / image_filename  # Assuming `image_folder` is a Path object
-
-    # Check if the file exists
-    if not image_path.exists():
-        raise ValueError(f"Image {image_filename} not found in the specified folder.")
-
- 
+            print(f"  Calculated: {calc_val:.4f}")
+            print(f"  Original:   {orig_val:.4f}")
+            print(f"  Difference: {abs(calc_val - orig_val):.4f}")
 
 if __name__ == "__main__":
     main()

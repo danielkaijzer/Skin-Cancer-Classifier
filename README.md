@@ -1,4 +1,4 @@
-# Skin Lesion Malignancy Probability Prediction
+# Skin Cancer Classifier Project
 
 ## Author
 Daniel Kaijzer
@@ -15,27 +15,25 @@ This project is a web application that allows users to upload an image of a skin
 - View additional information about the analysis, such as the derived features and the model's confidence in the prediction
 
 ## Usage
-1. Launch the Streamlit application using `streamlit run webapp.py` or  `streamlit run webappv2.py`
+1. Launch the Streamlit application using `streamlit run webapp.py` 
 2. In the left column, enter the required information about the skin lesion, including the patient's age, the lesion's diameter, the patient's sex, and the lesion's anatomical location.
-3. In the right column, upload an image of the skin lesion. The image must be square and between 100x100 and 2000x2000 pixels.
+3. In the right column, upload an image of the skin lesion. The image must be square and between 90x90 or 2000x2000 pixels. It doesn't need to be square but will work better if more square.
 4. Click the "Analyze Lesion" button to initiate the analysis.
 5. The application will display the predicted probability of the lesion being malignant, the mask calculated by my `image_feature_extractor.py` file and then a risk level (low, medium, or high). 
+6. To use `image_feature_extractor.py` by itself requires downloading train-metadata.csv from the ISIC 2024 dataset: https://www.kaggle.com/competitions/isic-2024-challenge/data . Once downloaded you can run the program using `python image_feature_extractor.py`. Then you will see the differences between the feature values extracted from my program and ground truth data from the CSV.
 
 
 ## Project Structure
-- `README.txt`: This file, providing an overview of the project
 - `requirements.txt`: Lists the required Python packages for running the project
 - `Image_Feature_Extractor.py`: Uses OpenCV to extract tabular geometric and color features from - image files directly
 - `webapp.py`: Streamlit app that uses the tabular-only model for predictions
-- `webapp2.py`: Streamlit app that uses the hybrid model (tabular + CNN) for predictions
 - `EDA.ipynb`: Jupyter Notebook containing basic exploratory data analysis on the training data CSV file
 - `model.ipynb`: Jupyter Notebook documenting the model creation process and comparing the performance of the tabular-only and hybrid models
 - `model.pkl`: Serialized tabular-only model
-- `hybrid_model.pkl`: Serialized hybrid model (tabular + CNN)
-- `feature_columns.json`: Required for the Streamlit apps to perform inference properly
-- `encoder.pkl`: Required for the Streamlit apps to perform inference properly
-- `cnn_model_hdf5_balanced.pth`: CNN model weights required for webapp2.py
-- `Sample_Images/`: Folder containing sample images for testing the web application
+- `feature_columns.json`: Required for the Streamlit app to perform inference properly
+- `encoder.pkl`: Required for the Streamlit app to perform inference properly
+- `Sample_Images/`: Folder containing sample images from holdout test set for testing the web application. These images have not been seen by my model before inference.
+- `Skin Cancer Classifier Presentation.pdf`: My presentation detailing this project.
 
 ## Model Development
 The `EDA.ipynb` notebook contains basic exploratory data analysis performed on the training data CSV file. The `model.ipynb` notebook documents the process of creating the ML models and compares the performance of the tabular-only model and the hybrid model that combines tabular data with a CNN–the CNN creates an embedding matrix that is combined with tabular data for retraining my LGBM-based model.
@@ -57,6 +55,7 @@ The `EDA.ipynb` notebook contains basic exploratory data analysis performed on t
 - The image embeddings are combined with the tabular features to create an enhanced feature set.
 - The same ensemble of LightGBM models is then trained on this enhanced feature set.
 - The CNN architecture and training process is defined in the train_embedding_model_with_hdf5 function.
+- NOTE: I have decided not use the model in my webapp because it does not perform as well (see slides for comparison). The code to build the model is in model.ipynb.
 
 ## Image Feature Extractor program
 This program uses OpenCV to extract various geometric and color features directly from the image files. This enables the streamlit web app to function without requiring too much user input. Here's a breakdown of its main components:
@@ -97,3 +96,4 @@ The image_feature_extractor.py file provides a comprehensive set of features tha
 
 ## Acknowledgments
 The datasets used for training the machine learning model was obtained from the ISIC Archive.
+My tabular model builds on the Kaggle notebook made by Farukcan Saglam: https://www.kaggle.com/code/greysky/isic-2024-only-tabular-data

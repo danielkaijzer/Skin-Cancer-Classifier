@@ -1,0 +1,42 @@
+# Metadata for Sample Images
+
+## Positive (Malignant) Examples:
+
+### ISIC_0082829.jpg
+Age: 80
+Longest Diameter of Lesion (mm): 9.27
+Sex: female
+Anatomical Site: anterior torso
+Location (detailed): Torso Front Top Half
+
+### ISIC_1885694.jpg
+Age: 60
+Longest Diameter of Lesion (mm): 2.70
+Sex: male
+Anatomical Site: head/neck
+Location (detailed): Head & Neck
+
+### ISIC_6776067.jpg
+Age: 55
+Longest Diameter of Lesion (mm): 5.15
+Sex: male
+Anatomical Site: head/neck
+Location (detailed): Head & Neck
+
+
+
+## Negative (Benign) Examples:
+
+### ISIC_0157465.jpg
+Age: 55
+Longest Diameter of Lesion (mm): 3.30
+Sex: female
+Anatomical Site: upper extremity
+Location (detailed): Right Arm - Upper
+
+### ISIC_9153490.jpg
+Age: 60
+Longest Diameter of Lesion (mm): 2.60
+Sex: male
+Anatomical Site: upper extremity
+Location (detailed): Right Arm - Lower
