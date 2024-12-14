@@ -1,9 +1,0 @@
-README.md
-setup.py
-lesion_app.egg-info/PKG-INFO
-lesion_app.egg-info/SOURCES.txt
-lesion_app.egg-info/dependency_links.txt
-lesion_app.egg-info/requires.txt
-lesion_app.egg-info/top_level.txt
-src/__init__.py
-src/image_feature_extractor.py
