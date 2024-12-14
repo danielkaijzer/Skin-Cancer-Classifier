@@ -1,0 +1,10 @@
+Metadata-Version: 2.1
+Name: lesion-app
+Version: 0.1
+Requires-Dist: streamlit
+Requires-Dist: pandas
+Requires-Dist: numpy
+Requires-Dist: Pillow
+Requires-Dist: opencv-python
+Requires-Dist: scikit-learn
+Requires-Dist: lightgbm

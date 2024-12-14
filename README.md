@@ -24,6 +24,7 @@ To use `image_feature_extractor.py` independently:
 3. For more data: https://www.kaggle.com/competitions/isic-2024-challenge/data
 
 ## Project Structure
+```
 project_root/
 ├── app/
 │   └── webapp.py              # Streamlit application
@@ -44,6 +45,7 @@ project_root/
 ├── Test_Images/            # Sample images from holdout test set
 ├── requirements.txt        # Project dependencies
 └── setup.py               # Package installation configuration
+```
 
 ## Model Development
 The `EDA.ipynb` notebook contains basic exploratory data analysis performed on the training data CSV file. The `model.ipynb` notebook documents the process of creating the ML models and compares the performance of the tabular-only model and the hybrid model that combines tabular data with a CNN–the CNN creates an embedding matrix that is combined with tabular data for retraining my LGBM-based model.
