@@ -42,6 +42,7 @@ The `EDA.ipynb` notebook contains basic exploratory data analysis performed on t
 - Each LightGBM model is wrapped in a Pipeline with a RandomUnderSampler to handle class imbalance.
 - The models are trained using cross-validation with StratifiedGroupKFold to ensure proper data splitting.
 - Feature importances are calculated by averaging importances across all folds and models.
+- Current version of model has pAUC of 0.1695 on holdout test set. This is quite close to the best score from ISIC 2024 competition, 0.17264 .
 
 
 2. Hybrid Model (Tabular + CNN):
