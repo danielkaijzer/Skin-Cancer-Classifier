@@ -10,7 +10,6 @@ This project is a web application that allows users to upload an image of a skin
 - Upload an image of a skin lesion
 - Provide additional information about the lesion, such as the patient's age and the lesion location
 - Receive a prediction of the probability of the lesion being malignant, along with a risk level (low, medium, or high)
-- View additional information about the analysis, such as the derived features and the model's confidence in the prediction
 
 ## Usage
 1. Launch the Streamlit application using `streamlit run webapp.py` 
