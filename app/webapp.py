@@ -5,6 +5,8 @@ Author: Daniel Kaijzer
 
 """
 
+import os
+import sys
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -14,6 +16,17 @@ import io
 import json
 import joblib
 import cv2
+
+# Get the relative paths using Path
+APP_DIR = Path(__file__).resolve().parent
+ROOT_DIR = APP_DIR.parent
+SRC_DIR = ROOT_DIR / 'src'
+MODELS_DIR = ROOT_DIR / 'models'
+
+# Add src directory to path
+if str(SRC_DIR) not in sys.path:
+    sys.path.append(str(SRC_DIR))
+
 from image_feature_extractor import create_masks, calculate_shape_features, calculate_color_features, analyze_lesion
 from sklearn.preprocessing import OneHotEncoder
 import lightgbm as lgb
@@ -25,11 +38,10 @@ st.set_page_config(page_title="Skin Lesion Analysis", layout="wide")
 # debug_mode = st.sidebar.checkbox("Debug Mode", value=False)
 debug_mode = False
 
-# Load model
-model = joblib.load('model.pkl')
-# Load encoder and feature columns
-encoder = joblib.load('encoder.pkl')
-with open('feature_columns.json', 'r') as f:
+# Load model and assets
+model = joblib.load(MODELS_DIR / "model.pkl")
+encoder = joblib.load(MODELS_DIR / "encoder.pkl")
+with open(MODELS_DIR / "feature_columns.json", 'r') as f:
     cols_info = json.load(f)
 
 # These are the original categorical columns for input to encoder
