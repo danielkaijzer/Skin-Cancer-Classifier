@@ -349,7 +349,7 @@ def main():
     # image_folder = Path('Test_Images')
     src_dir = Path(__file__).resolve().parent
     root_dir = src_dir.parent
-    train_path = root_dir / 'data' / 'train-metadata.csv'
+    train_path = root_dir / 'data' / 'test-metadata.csv'
     image_folder = root_dir / 'Test_Images'  
 
     # Get user input for image file

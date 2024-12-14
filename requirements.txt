@@ -28,7 +28,4 @@ notebook
 # Misc utilities
 tqdm
 PyYAML
-imblearn
-pickle
-json
-io
+imbalanced-learn
