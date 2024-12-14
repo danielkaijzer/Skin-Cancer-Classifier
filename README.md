@@ -89,7 +89,7 @@ The image_feature_extractor.py file provides a comprehensive set of features tha
 
 
 ## Requirements
-* See requirements.txt file
+* See `requirements.txt` file
 
 ## Acknowledgments
 The datasets used for training the machine learning model was obtained from the ISIC Archive.
