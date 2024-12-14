@@ -15,7 +15,10 @@ This project is a web application that allows users to upload an image of a skin
 
 ### Running the Web Application
 Launch the Streamlit application:
-```streamlit run app/webapp.py```
+
+```
+streamlit run app/webapp.py
+```
 
 Once launched:
 1. In the left column, enter:
@@ -34,7 +37,11 @@ Once launched:
 - Risk level assessment (low/medium/high)
 
 Using `image_feature_extractor.py` independently:
-```python src/image_feature_extractor.py```
+
+```
+python src/image_feature_extractor.py
+```
+
 1. You will get option to select from 5 test images
 2. Once an image is chosen, the program will process the images 
 and compare differences between ground truth values and the values extracted directly from the image
