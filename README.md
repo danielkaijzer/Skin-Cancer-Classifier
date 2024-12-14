@@ -10,7 +10,6 @@ This project is a web application that allows users to upload an image of a skin
 - Upload an image of a skin lesion
 - Provide additional information about the lesion, such as the patient's age and the lesion location
 - Receive a prediction of the probability of the lesion being malignant, along with a risk level (low, medium, or high)
-- View additional information about the analysis, such as the derived features and the model's confidence in the prediction
 
 ## Usage
 1. Launch the Streamlit application using `streamlit run webapp.py` 
@@ -43,6 +42,7 @@ The `EDA.ipynb` notebook contains basic exploratory data analysis performed on t
 - Each LightGBM model is wrapped in a Pipeline with a RandomUnderSampler to handle class imbalance.
 - The models are trained using cross-validation with StratifiedGroupKFold to ensure proper data splitting.
 - Feature importances are calculated by averaging importances across all folds and models.
+- Current version of model has pAUC of 0.1695 on holdout test set. This is quite close to the best score from ISIC 2024 competition, 0.17264 .
 
 
 2. Hybrid Model (Tabular + CNN):
@@ -57,7 +57,7 @@ The `EDA.ipynb` notebook contains basic exploratory data analysis performed on t
 
 ## Image Feature Extractor program
 This program uses OpenCV to extract various geometric and color features directly from the image files. This enables the streamlit web app to function without requiring too much user input. Here's a breakdown of its main components:
-1. create_masks function:
+1. `create_masks` function:
 - Converts the image to the LAB color space.
 - Applies thresholding on the L, A, and B channels to identify potential lesion regions.
 - Performs morphological operations (opening and closing) to refine the binary mask.
@@ -65,24 +65,24 @@ This program uses OpenCV to extract various geometric and color features directl
 - Creates lesion and surrounding area masks.
 
 
-2. calculate_shape_features function:
+2. `calculate_shape_features` function:
 - Calculates shape-related features like area, perimeter, minor axis length, eccentricity, and area-perimeter ratio.
 - Uses OpenCV functions like contourArea, arcLength, minAreaRect, and moments for feature extraction.
 
 
-3. calculate_color_features function:
+3. `calculate_color_features` function:
 - Calculates color-related features in the LAB color space.
 - Computes means and differences of L, A, and B values inside and outside the lesion.
 - Calculates derived features like hue, chroma, and color differences.
 
 
-4. visualize_analysis function:
+4.`visualize_analysis` function:
 - Creates visualizations to illustrate the analysis process.
 - Displays the original image, L and A channels, detected lesion contour, and masks.
 - Plots color distributions inside and outside the lesion.
 
 
-5. analyze_lesion function:
+5. `analyze_lesion` function:
 - Main function that orchestrates the entire analysis pipeline.
 - Reads the image, creates masks, calculates scale factor, and computes shape and color features.
 - Calls the visualize_analysis function to generate visualizations.
@@ -90,7 +90,7 @@ The image_feature_extractor.py file provides a comprehensive set of features tha
 
 
 ## Requirements
-* See requirements.txt file
+* See `requirements.txt` file
 
 ## Acknowledgments
 The datasets used for training the machine learning model was obtained from the ISIC Archive.
