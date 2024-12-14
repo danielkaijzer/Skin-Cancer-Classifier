@@ -6,11 +6,6 @@ Daniel Kaijzer
 ## Project Overview
 This project is a web application that allows users to upload an image of a skin lesion and receive a prediction of the probability of the lesion being malignant. The application uses a machine learning model that was trained on a dataset of skin lesion images and associated metadata to make the predictions.
 
-## Features
-- Upload an image of a skin lesion
-- Provide additional information about the lesion, such as the patient's age and the lesion location
-- Receive a prediction of the probability of the lesion being malignant, along with a risk level (low, medium, or high)
-
 ## Usage
 
 ### Running the Web Application
@@ -36,7 +31,7 @@ Once launched:
 - Generated lesion mask
 - Risk level assessment (low/medium/high)
 
-Using `image_feature_extractor.py` independently:
+### Using `image_feature_extractor.py` independently:
 
 ```
 python src/image_feature_extractor.py
