@@ -12,16 +12,33 @@ This project is a web application that allows users to upload an image of a skin
 - Receive a prediction of the probability of the lesion being malignant, along with a risk level (low, medium, or high)
 
 ## Usage
-1. Launch the Streamlit application using `streamlit run app/webapp.py` 
-2. In the left column, enter the required information about the skin lesion, including the patient's age, the lesion's diameter, the patient's sex, and the lesion's anatomical location.
-3. In the right column, upload an image of the skin lesion. The image must be square and between 90x90 or 2000x2000 pixels. It doesn't need to be square but will work better if more square.
-4. Click the "Analyze Lesion" button to initiate the analysis.
-5. The application will display the predicted probability of the lesion being malignant, the mask calculated by my `image_feature_extractor.py` file and then a risk level (low, medium, or high). 
 
-To use `image_feature_extractor.py` independently:
-1. Run `python src/image_feature_extractor.py` 
-2. You will see the differences between extracted feature values and ground truth data from the CSV
-3. For more data: https://www.kaggle.com/competitions/isic-2024-challenge/data
+### Running the Web Application
+Launch the Streamlit application:
+```streamlit run app/webapp.py```
+
+Once launched:
+1. In the left column, enter:
+- Patient's age
+- Lesion diameter
+- Patient's sex
+- Anatomical location
+
+2. In the right column, upload the lesion image
+- Image requirements: Between 90x90 and 2000x2000 pixels
+- Square images work best, but not required
+
+3. Click "Analyze Lesion" to get:
+- Malignancy probability
+- Generated lesion mask
+- Risk level assessment (low/medium/high)
+
+Using `image_feature_extractor.py` independently:
+```python src/image_feature_extractor.py```
+1. You will get option to select from 5 test images
+2. Once an image is chosen, the program will process the images 
+and compare differences between ground truth values and the values extracted directly from the image
+3. For more test data: https://www.kaggle.com/competitions/isic-2024-challenge/data
 
 ## Project Structure
 ```
@@ -29,7 +46,7 @@ project_root/
 ├── app/
 │   └── webapp.py              # Streamlit application
 ├── data/
-│   └── test-metadata.csv      # Filtered metadata for test images
+│   └── test-metadata.csv      # Ground truth metadata for test images
 ├── docs/
 │   └── DK_Skin_Cancer_Classifier_Presentation.pdf
 ├── models/
@@ -42,7 +59,7 @@ project_root/
 ├── src/
 │   ├── __init__.py
 │   └── image_feature_extractor.py  # Feature extraction module
-├── Test_Images/            # Sample images from holdout test set
+├── Test_Images/            # Sample images from holdout test set and user input metadata for each image
 ├── requirements.txt        # Project dependencies
 └── setup.py               # Package installation configuration
 ```
